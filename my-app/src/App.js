@@ -1,24 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
+import {
+  AppRoot,
+  SplitLayout,
+  SplitCol,
+  View,
+  Panel,
+  PanelHeader,
+  Header,
+  Group,
+  SimpleCell,
+} from '@vkontakte/vkui';
+import '@vkontakte/vkui/dist/vkui.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppRoot>
+      <View activePanel="main">
+        <Panel id='main'>
+          <PanelHeader>SUAI schedule</PanelHeader>
+          <Group mode='card' header={<Header mode='secondary'>
+            Выбери свою группу
+          </Header>}></Group>
+        </Panel>
+      </View>
+    </AppRoot>
   );
 }
 
