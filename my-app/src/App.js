@@ -21,7 +21,7 @@ function App() {
   // Функция для получения расписания группы
   const fetchSchedule = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/group/', {
+      const response = await fetch('https://prod-app52500571-c6c194c731ca.pages-ac.vk-apps.com/index.html/group/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
