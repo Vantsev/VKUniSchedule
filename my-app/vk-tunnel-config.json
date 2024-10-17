@@ -1,0 +1,8 @@
+{
+    "app_id": "52500571",
+    "endpoints": [
+        "mobile",
+        "mvk",
+        "web"
+    ]
+}
