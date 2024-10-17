@@ -12,15 +12,14 @@ VKUniSchedule is a VK Mini App that allows university students to easily access 
 ## Technologies Used:
 - **Backend**: Python (FastAPI/Flask)
 - **Frontend**: React, VK Bridge
-- **Database**: PostgreSQL/SQLite
+- **Database**:  None
 - **Deployment**: None
 
 ## How to Run:
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Vantsev/VKUniSchedule.git
+    None
 2. ```bash
-   cd VKUniSchedule
-   pip install -r requirements.txt
+    None
 3. ```bash
    None
