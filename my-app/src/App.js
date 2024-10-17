@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   AppRoot,
@@ -10,6 +9,7 @@ import {
   Header,
   Group,
   SimpleCell,
+  Button,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -19,9 +19,11 @@ function App() {
       <View activePanel="main">
         <Panel id='main'>
           <PanelHeader>SUAI schedule</PanelHeader>
-          <Group mode='card' header={<Header mode='secondary'>
-            Выбери свою группу
-          </Header>}></Group>
+          <Group mode='card' header={<Header mode='secondary'>Выбери свою группу</Header>}>
+            <Button size="l" mode="primary" onClick={() => {}}>
+              Нажми меня
+            </Button>
+          </Group>
         </Panel>
       </View>
     </AppRoot>
