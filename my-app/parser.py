@@ -40,7 +40,7 @@ def parse_schedule(file_path):
 
 # Функция для сохранения всех расписаний в один JSON-файл
 def save_all_schedules_to_json(schedules):
-    with open('all_schedules.json', 'w', encoding='utf-8') as json_file:
+    with open('src/all_schedules.json', 'w', encoding='utf-8') as json_file:
         json.dump(schedules, json_file, ensure_ascii=False, indent=4)
     print('Все расписания сохранены в файл all_schedules.json')
 

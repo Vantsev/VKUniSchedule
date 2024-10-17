@@ -1,42 +1,18 @@
 import './App.css';
-import {
-  AppRoot,
-  SplitLayout,
-  SplitCol,
-  View,
-  Panel,
-  PanelHeader,
-  Header,
-  Group,
-  SimpleCell,
-  Button,
-} from '@vkontakte/vkui';
-import '@vkontakte/vkui/dist/vkui.css';
 import React, { useState } from 'react';
+import schedules from './all_schedules.json'; // Импортируем локальный файл JSON
 
 function App() {
   const [groupId, setGroupId] = useState('');
   const [schedule, setSchedule] = useState(null);
 
-  // Функция для получения расписания группы
-  const fetchSchedule = async () => {
-    try {
-      const response = await fetch('https://prod-app52500571-c6c194c731ca.pages-ac.vk-apps.com/index.html/group/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ group_id: groupId }),  // Отправляем ID группы
-      });
-
-      const data = await response.json();
-      if (data.schedule) {
-        setSchedule(data.schedule);  // Выводим расписание
-      } else {
-        setSchedule(['Группа не найдена']);  // Если группа не найдена
-      }
-    } catch (error) {
-      console.error('Ошибка:', error);
+  // Функция для получения расписания группы из локального JSON
+  const fetchSchedule = () => {
+    const groupSchedule = schedules[groupId];
+    if (groupSchedule) {
+      setSchedule(groupSchedule);  // Устанавливаем расписание
+    } else {
+      setSchedule({ error: 'Группа не найдена' });  // Если группа не найдена
     }
   };
 
@@ -50,11 +26,26 @@ function App() {
         onChange={(e) => setGroupId(e.target.value)}
       />
       <button onClick={fetchSchedule}>Получить расписание</button>
+
       {schedule && (
         <div>
-          {schedule.map((item, index) => (
-            <p key={index}>{item}</p>
-          ))}
+          {schedule.error ? (
+            <p>{schedule.error}</p>
+          ) : (
+            Object.entries(schedule).map(([day, lessons], index) => (
+              <div key={index}>
+                <h2>{day}</h2>
+                {Object.entries(lessons).map(([time, details], lessonIndex) => (
+                  <div key={lessonIndex}>
+                    <strong>{time}</strong>
+                    {details.map((detail, detailIndex) => (
+                      <p key={detailIndex}>{detail}</p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>
