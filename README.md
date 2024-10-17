@@ -23,8 +23,11 @@ VKUniSchedule is a VK Mini App that allows university students to easily access 
    
 2. Start the local server:
    ```bash
+    uvicorn main:app --reload
     npm start
-   
+
 3. Start the VK server:
    ```bash
    npm run tunnel
+   
+
