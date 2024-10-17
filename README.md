@@ -18,8 +18,12 @@ VKUniSchedule is a VK Mini App that allows university students to easily access 
 ## How to Run:
 1. Clone the repository:
    ```bash
-    None
-2. ```bash
-    None
-3. ```bash
-   None
+    https://github.com/Vantsev/VKUniSchedule.git
+   
+2. Start the local server:
+   ```bash
+    npm start
+   
+3. Start the VK server:
+   ```bash
+   npm run tunnel
