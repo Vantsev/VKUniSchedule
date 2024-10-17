@@ -10,7 +10,7 @@ VKUniSchedule is a VK Mini App that allows university students to easily access 
 - Supports multiple groups and custom timetable updates.
 
 ## Technologies Used:
-- **Backend**: Python (FastAPI/Flask)
+- **Backend**: Python (FastAPI/Flask)???
 - **Frontend**: React, VK Bridge
 - **Database**:  None
 - **Deployment**: None
