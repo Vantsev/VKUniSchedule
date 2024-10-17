@@ -1,5 +1,7 @@
 import './App.css';
 import {
+  AdaptivityProvider,
+  ConfigProvider,
   AppRoot,
   SplitLayout,
   SplitCol,
@@ -9,10 +11,13 @@ import {
   Header,
   Group,
   SimpleCell,
-  Button,
+  usePlatform,
+    Input,
+    Button,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 
 function App() {
   const [groupId, setGroupId] = useState('');
@@ -40,25 +45,39 @@ function App() {
     }
   };
 
+  const platform = usePlatform();
+
   return (
-    <div>
-      <h1>Расписание группы</h1>
-      <input
-        type="text"
-        placeholder="Введите ID группы"
-        value={groupId}
-        onChange={(e) => setGroupId(e.target.value)}
-      />
-      <button onClick={fetchSchedule}>Получить расписание</button>
-      {schedule && (
-        <div>
-          {schedule.map((item, index) => (
-            <p key={index}>{item}</p>
-          ))}
-        </div>
-      )}
-    </div>
+      <AppRoot>
+        <SplitLayout header={platform !== 'vkcom' && <PanelHeader delimiter="none" />}>
+          <SplitCol autoSpaced>
+            <View activePanel="main">
+              <Panel id="main">
+                <PanelHeader>SUAI</PanelHeader>
+                <Input type="text" placeholder="Введите номер группы" value={groupId} onChange={(e) => setGroupId(e.target.value)}></Input>
+                <Button onClick = {fetchSchedule}>Получить расписание</Button>
+                {schedule && (
+                    <Panel id="shedule">
+                      {schedule.map((item, index) => (<SimpleCell key={index}>{item}</SimpleCell>
+                      ))}
+                    </Panel>
+                )}
+              </Panel>
+            </View>
+          </SplitCol>
+        </SplitLayout>
+      </AppRoot>
   );
 }
+
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container); // createRoot(container!) если вы используете TypeScript
+root.render(
+    <ConfigProvider>
+      <AdaptivityProvider>
+        <App />
+      </AdaptivityProvider>
+    </ConfigProvider>,
+);
 
 export default App;
