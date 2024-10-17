@@ -19,11 +19,3 @@ def get_schedule_for_group(group_id: str):
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Файл с расписанием не найден")
 
-# Эндпоинт для получения расписания группы
-@app.post("/group/")
-async def get_group_schedule(request: GroupRequest):
-    schedule = get_schedule_for_group(request.group_id)
-    if schedule:
-        return {"group_id": request.group_id, "schedule": schedule}
-    else:
-        return {"error": "Расписание для группы не найдено"}
