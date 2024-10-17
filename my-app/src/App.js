@@ -18,7 +18,7 @@ function App() {
   const [groupId, setGroupId] = useState('');
   const [schedule, setSchedule] = useState(null);
 
-  // Функция для отправки запроса
+  // Функция для получения расписания группы
   const fetchSchedule = async () => {
     try {
       const response = await fetch('http://127.0.0.1:8000/group/', {
@@ -26,11 +26,15 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ group_id: groupId }),  // Отправляем введённый ID группы
+        body: JSON.stringify({ group_id: groupId }),  // Отправляем ID группы
       });
 
       const data = await response.json();
-      setSchedule(data.schedule);  // Обрабатываем ответ и выводим его
+      if (data.schedule) {
+        setSchedule(data.schedule);  // Выводим расписание
+      } else {
+        setSchedule(['Группа не найдена']);  // Если группа не найдена
+      }
     } catch (error) {
       console.error('Ошибка:', error);
     }
@@ -43,10 +47,16 @@ function App() {
         type="text"
         placeholder="Введите ID группы"
         value={groupId}
-        onChange={(e) => setGroupId(e.target.value)}  // Обновляем значение ID группы
+        onChange={(e) => setGroupId(e.target.value)}
       />
       <button onClick={fetchSchedule}>Получить расписание</button>
-      {schedule && <p>{schedule}</p>}  {/* Выводим ответ */}
+      {schedule && (
+        <div>
+          {schedule.map((item, index) => (
+            <p key={index}>{item}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
