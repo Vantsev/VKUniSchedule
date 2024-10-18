@@ -2,7 +2,28 @@ import './App.css';
 import React, {useEffect, useState} from 'react';
 import schedules from './all_schedules.json'; // Импортируем локальный файл JSON
 
+// Компонент для вычисления четности недели
+function useWeekParity() {
+  const [isOddWeek, setIsOddWeek] = useState(false);
+
+  useEffect(() => {
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth();
+    const today = new Date(year, month, 0).getTime();
+    const now = new Date().getTime();
+    const week = Math.ceil((now - today) / (1000 * 60 * 60 * 24 * 7));
+    setIsOddWeek(week % 2 !== 0); // Четная неделя
+  }, []);
+
+  return isOddWeek;
+}
+
 function App() {
+    const isOddWeek = useWeekParity();
+    const weekDescription = isOddWeek
+        ? "▲ - верхняя (нечетная) неделя"
+        : "▼ - нижняя (четная) неделя";
+
   const [groupId, setGroupId] = useState('');
   const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
 
@@ -19,6 +40,7 @@ function App() {
   return (
     <div>
       <h1>Расписание группы</h1>
+        <p>{weekDescription}</p>
       <input
         type="text"
         placeholder="Введите ID группы"
