@@ -97,7 +97,7 @@ function App() {
   );
 }
 
-
+//Просто функция для тестирования, чтобы не ломать app
 function Test() {
   const [groupId, setGroupId] = useState('');
   const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
