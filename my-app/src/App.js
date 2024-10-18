@@ -18,6 +18,24 @@ function useWeekParity() {
   return isOddWeek;
 }
 
+
+// Функция для фильтрации занятий по текущей неделе
+function filterLessonsByWeek(lessons, isOddWeek) {
+  return lessons.filter((lesson) => {
+    if (lesson.startsWith('▲') && isOddWeek) {
+      return true; // Показываем для нечетной недели
+    }
+    if (lesson.startsWith('▼') && !isOddWeek) {
+      return true; // Показываем для четной недели
+    }
+    if (!lesson.startsWith('▲') && !lesson.startsWith('▼')) {
+      return true; // Показываем независимо от четности
+    }
+    return false; // Убираем занятия, которые не подходят по четности
+  });
+}
+
+
 function App() {
     const isOddWeek = useWeekParity();
     const weekDescription = isOddWeek
@@ -40,7 +58,7 @@ function App() {
   return (
     <div>
       <h1>Расписание группы</h1>
-        <p>{weekDescription}</p>
+      <p>{weekDescription}</p>
       <input
         type="text"
         placeholder="Введите ID группы"
@@ -49,23 +67,25 @@ function App() {
       />
       <button onClick={fetchSchedule}>Получить расписание</button>
 
-      {schedule && ( //Если schedule не равно null, отображается блок с расписанием.
+      {schedule && ( // Если schedule не равно null, отображается блок с расписанием.
         <div>
-          {schedule.error ? ( //Проверка на наличие ошибки в расписании. Если ошибки нет, отображаем расписание.
+          {schedule.error ? ( // Проверка на наличие ошибки в расписании. Если ошибки нет, отображаем расписание.
             <p>{schedule.error}</p>
           ) : (
-              //Преобразуем объект расписания в массив и перебираем его. Расписание разбивается по ключам на группы и дни
-            Object.entries(schedule).map(([group, days], index) => (
+            // Преобразуем объект расписания в массив и перебираем его. Расписание разбивается по ключам на группы и дни
+            Object.entries(schedule).map(([day, lessons], index) => (
               <div key={index}>
-                <h2>{group}</h2>
-                  {/*Преобразуем объект дней в массив и перебираем его. Разбивается по ключам на день недели и пары в этот день*/}
-                {Object.entries(days).map(([day, lessons], lessonIndex) => (
+                <h2>{day}</h2>
+                {/* Перебираем пары на день и фильтруем их в зависимости от четности недели */}
+                {Object.entries(lessons).map(([time, details], lessonIndex) => (
                   <div key={lessonIndex}>
-                    <strong>{day}</strong>
-                      {/*Объект пары разбивается на ключ-значение, а именно номер пары и время с ее описанием*/}
-                    {lessons.map((detail, detailIndex) => (
-                      <p key={detailIndex}>{detail}</p>
-                    ))}
+                    <strong>{time}</strong>
+                    {/* Фильтруем занятия по текущей неделе */}
+                    {filterLessonsByWeek(details, isOddWeek).length > 0 ? (
+                      <p>{filterLessonsByWeek(details, isOddWeek)[0]}</p>
+                    ) : (
+                      <p>Отдыхаем</p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -76,6 +96,7 @@ function App() {
     </div>
   );
 }
+
 
 function Test() {
   const [groupId, setGroupId] = useState('');
