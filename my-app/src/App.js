@@ -17,7 +17,9 @@ import {
     Div,
     ConfigProvider,
     AdaptivityProvider,
-    Text
+    Text,
+    Textarea,
+    IconButton
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import {createRoot} from "react-dom/client";
@@ -75,6 +77,9 @@ function App() {
             setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
         }
     };
+    const clear = () => {
+        document.getElementById("groupInput").value = '';
+        }
 
     return (
         <ConfigProvider>
@@ -90,9 +95,15 @@ function App() {
                                         <FormItem top="Введите ID группы">
                                             <Input
                                                 type="text"
+                                                id = "groupInput"
                                                 placeholder=""
                                                 value={groupId}
                                                 onChange={(e) => setGroupId(e.target.value)}
+                                                after={
+                                                    <IconButton hoverMode="opacity" label="Очистить поле" onClick={clear}>
+                                                        ❌
+                                                    </IconButton>
+                                                }
                                             />
                                         </FormItem>
                                         <FormItem>
