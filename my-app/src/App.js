@@ -4,7 +4,7 @@ import schedules from './all_schedules.json'; // Импортируем лока
 
 function App() {
   const [groupId, setGroupId] = useState('');
-  const [schedule, setSchedule] = useState(null);
+  const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
 
   // Функция для получения расписания группы из локального JSON
   const fetchSchedule = () => {
@@ -37,6 +37,7 @@ function App() {
             Object.entries(schedule).map(([day, lessons], index) => (
               <div key={index}>
                 <h2>{day}</h2>
+                  {/*Для каждого урока по времени (time) отображаются детали уроков (details)*/}
                 {Object.entries(lessons).map(([time, details], lessonIndex) => (
                   <div key={lessonIndex}>
                     <strong>{time}</strong>
