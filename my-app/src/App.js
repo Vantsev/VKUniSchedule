@@ -14,6 +14,7 @@ import {
   usePlatform,
     Input,
     Button,
+    IconButton,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import React, { useState } from 'react';
@@ -46,6 +47,9 @@ function App() {
   };
 
   const platform = usePlatform();
+  const clear = () => {
+    document.getElementById("groupInput").value = '';
+    };
 
   return (
       <AppRoot>
@@ -54,7 +58,10 @@ function App() {
             <View activePanel="main">
               <Panel id="main">
                 <PanelHeader>SUAI</PanelHeader>
-                <Input type="text" placeholder="Введите номер группы" value={groupId} onChange={(e) => setGroupId(e.target.value)}></Input>
+                <Input type="text" id = "groupInput" placeholder="Введите номер группы" value={groupId} onChange={(e) => setGroupId(e.target.value)} after={
+                  <IconButton hoverMode="opacity" label="Очистить поле" onClick={clear}>
+                    🥦</IconButton>
+                }></Input>
                 <Button onClick = {fetchSchedule}>Получить расписание</Button>
                 {schedule && (
                     <Panel id="shedule">
