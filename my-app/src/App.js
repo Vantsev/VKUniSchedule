@@ -27,11 +27,12 @@ function App() {
       />
       <button onClick={fetchSchedule}>Получить расписание</button>
 
-      {schedule && (
+      {schedule && ( //Если schedule не равно null, отображается блок с расписанием.
         <div>
-          {schedule.error ? (
+          {schedule.error ? ( //Проверка на наличие ошибки в расписании. Если ошибки нет, отображаем расписание.
             <p>{schedule.error}</p>
           ) : (
+              //Преобразуем объект расписания в массив и перебираем его. Каждый день недели (day) и соответствующие уроки (lessons) отображаются в виде заголовков (<h2>{day}</h2>).
             Object.entries(schedule).map(([day, lessons], index) => (
               <div key={index}>
                 <h2>{day}</h2>
