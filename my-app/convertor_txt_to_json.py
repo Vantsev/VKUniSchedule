@@ -11,14 +11,16 @@ def parse_schedule(file_path):
     current_group = None
     current_day = None
     current_schedule = {}
+    lesson_time = None
 
     group_pattern = re.compile(r'^\d{4}[А-ЯA-Zа-яa-z]*$')  # Регулярное выражение для поиска номера группы
     day_pattern = re.compile(r'^[А-Яа-я]+$')  # Регулярное выражение для поиска названия дня недели
     lesson_pattern = re.compile(
-        r'^(\d+\sпара\s\(\d{2}:\d{2}–\d{2}:\d{2}\))')  # Регулярное выражение для поиска времени пары
+        r'^(\d+\sпара\s\(\d{1,2}:\d{2}–\d{2}:\d{2}\))')  # Регулярное выражение для поиска времени пары
 
     for line in content:
         line = line.strip()
+
         if group_pattern.match(line):  # Если найден номер группы
             if current_group:
                 schedules[current_group] = current_schedule
@@ -31,7 +33,8 @@ def parse_schedule(file_path):
             lesson_time = lesson_pattern.search(line).group(1)
             lesson_description = line.replace(lesson_time, '').strip()  # Удаляем время пары из строки
             current_schedule[current_day][lesson_time] = [lesson_description]
-
+        elif line.startswith('▼ '):
+            current_schedule[current_day][lesson_time].append(line)
     if current_group:
         schedules[current_group] = current_schedule
 

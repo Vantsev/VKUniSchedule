@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import re
 
 options = Options()
 options.add_argument("--headless")
@@ -15,6 +16,8 @@ options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) App
 service = Service(executable_path=ChromeDriverManager().install())
 driver = webdriver.Chrome(options=options)
 wait = WebDriverWait(driver, 15, poll_frequency=1)
+
+patern = re.compile(r'\d{4}\w{0,2} ▼')
 
 def get_groups():
     driver.get("https://guap.ru/rasp/")
@@ -62,6 +65,10 @@ with open(f'all_schedules.txt', 'w', encoding='utf-8') as gs:
         schedule_for_group = get_schedule(all_groups[i][0])
         for day in schedule_for_group:
             for lessons in day:
-                print(lessons, file=gs)
+                if re.search(patern, lessons):
+                    upper_week, down_week = lessons.split(' ▼')
+                    print(f'{upper_week}\n{'\t'*5+' '}▼{down_week}', file=gs)
+                else:
+                    print(lessons, file=gs)
             print('\n', file=gs)
         print('\n', file=gs)
