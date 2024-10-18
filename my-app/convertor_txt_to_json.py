@@ -46,6 +46,6 @@ def save_all_schedules_to_json(schedules):
 
 
 # Основная программа
-file_path = 'groups_schedule.txt'
+file_path = 'all_schedules.txt'
 schedules = parse_schedule(file_path)
 save_all_schedules_to_json(schedules)
