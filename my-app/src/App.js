@@ -80,7 +80,11 @@ function App() {
     const clear = () => {
         document.getElementById("groupInput").value = '';
         }
-
+    useEffect(() => {
+        if (schedule && schedule.error) {
+            clear(); // Вызов функции clear, если есть ошибка
+        }
+    }, [schedule]);
     return (
         <ConfigProvider>
             <AdaptivityProvider>
@@ -96,7 +100,7 @@ function App() {
                                             <Input
                                                 type="text"
                                                 id = "groupInput"
-                                                placeholder=""
+                                                placeholder="Введите номер группы"
                                                 value={groupId}
                                                 onChange={(e) => setGroupId(e.target.value)}
                                                 after={
