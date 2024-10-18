@@ -126,16 +126,18 @@ function App() {
                                                 Object.entries(schedule).map(([day, lessons], index) => (
                                                     <Group header={<Header mode="primary">{day}</Header>} key={index}>
                                                         {/* Перебираем пары на день и фильтруем их в зависимости от четности недели */}
-                                                        {Object.entries(lessons).map(([time, details], lessonIndex) => (
-                                                            <SimpleCell key={lessonIndex}>
-                                                                <strong>{time}</strong>
-                                                                {/* Фильтруем занятия по текущей неделе */}
-                                                                {filterLessonsByWeek(details, isOddWeek).length > 0 ? (
-                                                                    <Div>{filterLessonsByWeek(details, isOddWeek)[0]}</Div>
-                                                                ) : (
-                                                                    <Div>Отдыхаем</Div>)}
-                                                            </SimpleCell>
-                                                        ))}
+                                                        {Object.entries(lessons).map(([time, details], lessonIndex) => {
+                                                            let filteredLessons = filterLessonsByWeek(details, isOddWeek);
+                                                            if (filteredLessons.length > 0) {
+                                                                return (
+                                                                    <SimpleCell key={lessonIndex}>
+                                                                        <strong>{time}</strong>
+                                                                        <Div>{filteredLessons[0]}</Div>
+                                                                    </SimpleCell>
+                                                                );
+                                                            }
+                                                        })}
+
                                                     </Group>
                                                 ))
                                             )}
