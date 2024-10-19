@@ -178,7 +178,11 @@ function App() {
                                                                 return (
                                                                     <SimpleCell key={lessonIndex}>
                                                                         <strong>{time}</strong>
-                                                                        <Div>{filteredLessons[0]}</Div>
+                                                                        <SplitLayout>
+                                                                        <Div id='lesson'>
+                                                                          <Textarea>{filteredLessons[0]}</Textarea>
+                                                                        </Div>
+                                                                        </SplitLayout>
                                                                     </SimpleCell>
                                                                 );
                                                             }
