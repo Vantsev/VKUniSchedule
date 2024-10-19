@@ -17,7 +17,7 @@ import {
     Div,
     ConfigProvider,
     AdaptivityProvider,
-    Text,
+    Text, ButtonGroup,
     Textarea,
     IconButton,
     Select
@@ -78,6 +78,15 @@ function App() {
             setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
         }
     };
+
+    const handleFullfetchSchedule = () =>{
+        setViewType('full');
+        fetchSchedule();
+    }
+    const handleCurrentfetchSchedule = () =>{
+        setViewType('current');
+        fetchSchedule();
+    }
     const clearG = () => {
         document.getElementById("groupInput").value = '';
         }
