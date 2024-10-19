@@ -179,9 +179,9 @@ function App() {
                                                                     <SimpleCell key={lessonIndex}>
                                                                         <strong>{time}</strong>
                                                                         <SplitLayout>
-                                                                        <Div id='lesson'>
-                                                                          <Textarea>{filteredLessons[0]}</Textarea>
-                                                                        </Div>
+                                                                            <Div style={{ width: '100vw'}}>
+                                                                                <Textarea readOnly>{filteredLessons[0]}</Textarea>
+                                                                            </Div>
                                                                         </SplitLayout>
                                                                     </SimpleCell>
                                                                 );
