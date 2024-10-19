@@ -65,12 +65,22 @@ function App() {
 
     const [groupId, setGroupId] = useState('');
     const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
-
+    let flag = false
     // Функция для получения расписания группы из локального JSON
-    const fetchSchedule = () => {
+    const fetchFullSchedule = () => {
         const groupSchedule = schedules[groupId];
         if (groupSchedule) {
             setSchedule(groupSchedule);  // Устанавливаем расписание
+            flag = false
+        } else {
+            setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
+        }
+    };
+    const fetchCurrentSchedule = () => {
+        const groupSchedule = schedules[groupId];
+        if (groupSchedule) {
+            setSchedule(groupSchedule);  // Устанавливаем расписание
+            flag = true
         } else {
             setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
         }
@@ -100,10 +110,10 @@ function App() {
                                             {/*    Получить расписание*/}
                                             {/*</Button>*/}
                                             <ButtonGroup mode="horizontal" gap="m" stretched>
-                                                <Button onClick={fetchSchedule} size="l"  stretched>
-                                                  Полное расписание
+                                                <Button onClick={fetchFullSchedule} size="l"  stretched>
+                                                  Полное расписаниe
                                                 </Button>
-                                                <Button onClick={fetchSchedule} size="l"  stretched>
+                                                <Button onClick={fetchCurrentSchedule} size="l"  stretched>
                                                   Текущее расписание
                                                 </Button>
                                              </ButtonGroup>
@@ -124,10 +134,17 @@ function App() {
                                                             <SimpleCell key={lessonIndex}>
                                                                 <strong>{time}</strong>
                                                                 {/* Фильтруем занятия по текущей неделе */}
-                                                                {filterLessonsByWeek(details, isOddWeek).length > 0 ? (
+                                                                {flag ?  (
+                                                                    filterLessonsByWeek(details, isOddWeek).length > 0 ? (
                                                                     <Div>{filterLessonsByWeek(details, isOddWeek)[0]}</Div>
                                                                 ) : (
-                                                                    <Div>Отдыхаем</Div>)}
+                                                                    <Div>Отдыхаем</Div>)
+                                                                ) : (
+                                                                    details.map((lessons)=>
+                                                                        <Div>{lessons}</Div>)
+                                                                )
+                                                                }
+
                                                             </SimpleCell>
                                                         ))}
                                                     </Group>
