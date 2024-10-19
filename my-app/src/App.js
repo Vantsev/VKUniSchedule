@@ -56,7 +56,7 @@ function filterLessonsByWeek(lessons, isOddWeek) {
   });
 }
 
-
+let flag = false
 function App() {
     const isOddWeek = useWeekParity();
     const weekDescription = isOddWeek
@@ -65,22 +65,12 @@ function App() {
 
     const [groupId, setGroupId] = useState('');
     const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
-    let flag = false
+    const [typeWeek, setTypeWeek] = useState('full')
     // Функция для получения расписания группы из локального JSON
-    const fetchFullSchedule = () => {
+    const fetchlSchedule = () => {
         const groupSchedule = schedules[groupId];
         if (groupSchedule) {
             setSchedule(groupSchedule);  // Устанавливаем расписание
-            flag = false
-        } else {
-            setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
-        }
-    };
-    const fetchCurrentSchedule = () => {
-        const groupSchedule = schedules[groupId];
-        if (groupSchedule) {
-            setSchedule(groupSchedule);  // Устанавливаем расписание
-            flag = true
         } else {
             setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
         }
@@ -109,11 +99,17 @@ function App() {
                                             {/*<Button size="l" stretched onClick={fetchSchedule}>*/}
                                             {/*    Получить расписание*/}
                                             {/*</Button>*/}
-                                            <ButtonGroup mode="horizontal" gap="m" stretched>
-                                                <Button onClick={fetchFullSchedule} size="l"  stretched>
+                                            <ButtonGroup mode="horizontal" gap="m" stretched >
+                                                <Button onClick={() => {
+                                                    fetchlSchedule();
+                                                    setTypeWeek('full')
+                                                }} size="l"  stretched >
                                                   Полное расписаниe
                                                 </Button>
-                                                <Button onClick={fetchCurrentSchedule} size="l"  stretched>
+                                                <Button onClick={() => {
+                                                    fetchlSchedule();
+                                                    setTypeWeek('current')
+                                                }} size="l"  stretched >
                                                   Текущее расписание
                                                 </Button>
                                              </ButtonGroup>
@@ -134,14 +130,14 @@ function App() {
                                                             <SimpleCell key={lessonIndex}>
                                                                 <strong>{time}</strong>
                                                                 {/* Фильтруем занятия по текущей неделе */}
-                                                                {flag ?  (
+                                                                {typeWeek === 'current' ?  (
                                                                     filterLessonsByWeek(details, isOddWeek).length > 0 ? (
                                                                     <Div>{filterLessonsByWeek(details, isOddWeek)[0]}</Div>
                                                                 ) : (
                                                                     <Div>Отдыхаем</Div>)
                                                                 ) : (
-                                                                    details.map((lessons)=>
-                                                                        <Div>{lessons}</Div>)
+                                                                    details.map((lessons, indexLesson)=>
+                                                                        <Div key={indexLesson}>{lessons}</Div>)
                                                                 )
                                                                 }
 
