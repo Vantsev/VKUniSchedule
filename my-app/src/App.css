@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+
+.input-container {
+  display: flex;
+  justify-content: start;
+}
+
+#formTinput{
+  width: 50%;
+}
+#formKinput{
+  width: 25%;
+}
+#formAinput{
+  width: 25%;
+}
+
+#lesson{
+  width: 100%;
+}
+
