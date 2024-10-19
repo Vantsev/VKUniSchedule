@@ -19,7 +19,8 @@ import {
     AdaptivityProvider,
     Text,
     Textarea,
-    IconButton
+    IconButton,
+    Select
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import {createRoot} from "react-dom/client";
@@ -77,12 +78,18 @@ function App() {
             setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
         }
     };
-    const clear = () => {
+    const clearG = () => {
         document.getElementById("groupInput").value = '';
         }
+    const clearT = () => {
+        document.getElementById("teacherInput").value = '';
+    }
+    const clearA = () => {
+        document.getElementById("aditInput").value = '';
+    }
     useEffect(() => {
         if (schedule && schedule.error) {
-            clear(); // Вызов функции clear, если есть ошибка
+            clearG(); // Вызов функции clear, если есть ошибка
         }
     }, [schedule]);
     return (
@@ -96,20 +103,59 @@ function App() {
                                     <PanelHeader>Расписание группы</PanelHeader>
                                     <Group>
                                         <Div> {weekDescription} </Div>
-                                        <FormItem top="Введите ID группы">
+                                        <FormItem top="Введите номер группы">
                                             <Input
                                                 type="text"
-                                                id = "groupInput"
+                                                id="groupInput"
                                                 placeholder="Введите номер группы"
                                                 value={groupId}
                                                 onChange={(e) => setGroupId(e.target.value)}
                                                 after={
-                                                    <IconButton hoverMode="opacity" label="Очистить поле" onClick={clear}>
+                                                    <IconButton hoverMode="opacity" label="Очистить поле"
+                                                                onClick={clearG}>
                                                         ❌
                                                     </IconButton>
                                                 }
                                             />
                                         </FormItem>
+                                        <div className="input-container">
+                                            <FormItem top="Введите фамилию преподавателя" id="formTinput">
+                                                <Input
+                                                    type="text"
+                                                    id="teacherInput"
+                                                    placeholder="Введите фамилию преподавателя"
+                                                    after={
+                                                        <IconButton hoverMode="opacity" label="Очистить поле"
+                                                                    onClick={clearT}>
+                                                            ❌
+                                                        </IconButton>
+                                                    }
+                                                />
+                                            </FormItem>
+                                            <FormItem top="Выберите корпус" id="formKinput">
+                                                <Select
+                                                    placeholder="Выберите корпус"
+                                                    options={[
+                                                        { label: 'БМ', value: 'BM' },
+                                                        { label: 'Гаста', value: 'Gasta' },
+                                                        { label: 'Ленса', value: 'Lensa' },
+                                                    ]}
+                                                />
+                                            </FormItem>
+                                            <FormItem top="Введите Номер аудитории" id="formAinput">
+                                                <Input
+                                                    type="text"
+                                                    id="aditInput"
+                                                    placeholder="Введите номер аудитории"
+                                                    after={
+                                                        <IconButton hoverMode="opacity" label="Очистить поле"
+                                                                    onClick={clearA}>
+                                                            ❌
+                                                        </IconButton>
+                                                    }
+                                                />
+                                            </FormItem>
+                                        </div>
                                         <FormItem>
                                             <Button size="l" stretched onClick={fetchSchedule}>
                                                 Получить расписание
