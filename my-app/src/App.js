@@ -76,65 +76,6 @@ function App() {
         }
     };
 
-    return (
-        <ConfigProvider>
-            <AdaptivityProvider>
-                <AppRoot>
-                    <SplitLayout>
-                        <SplitCol>
-                            <View activePanel="main">
-                                <Panel id="main">
-                                    <PanelHeader>Расписание группы</PanelHeader>
-                                    <Group>
-                                        <Div> {weekDescription} </Div>
-                                        <FormItem top="Введите ID группы">
-                                            <Input
-                                                type="text"
-                                                placeholder=""
-                                                value={groupId}
-                                                onChange={(e) => setGroupId(e.target.value)}
-                                            />
-                                        </FormItem>
-                                        <FormItem>
-                                            <Button size="l" stretched onClick={fetchSchedule}>
-                                                Получить расписание
-                                            </Button>
-                                        </FormItem>
-                                    </Group>
-
-                                    {schedule && ( // Если schedule не равно null, отображается блок с расписанием.
-                                        <Group header={<Header mode="secondary">Расписание</Header>}>
-                                            {schedule.error ? ( // Проверка на наличие ошибки в расписании. Если ошибки нет, отображаем расписание.
-                                                <SimpleCell>{schedule.error}</SimpleCell>
-                                            ) : (
-                                                // Преобразуем объект расписания в массив и перебираем его. Расписание разбивается по ключам на группы и дни
-                                                Object.entries(schedule).map(([day, lessons], index) => (
-                                                    <Group header={<Header mode="primary">{day}</Header>} key={index}>
-                                                        {/* Перебираем пары на день и фильтруем их в зависимости от четности недели */}
-                                                        {Object.entries(lessons).map(([time, details], lessonIndex) => (
-                                                            <SimpleCell key={lessonIndex}>
-                                                                <strong>{time}</strong>
-                                                                {/* Фильтруем занятия по текущей неделе */}
-                                                                {filterLessonsByWeek(details, isOddWeek).length > 0 ? (
-                                                                    <Div>{filterLessonsByWeek(details, isOddWeek)[0]}</Div>
-                                                                ) : (
-                                                                    <Div>Отдыхаем</Div>)}
-                                                            </SimpleCell>
-                                                        ))}
-                                                    </Group>
-                                                ))
-                                            )}
-                                        </Group>
-                                    )}
-                                </Panel>
-                            </View>
-                        </SplitCol>
-                    </SplitLayout>
-                </AppRoot>
-            </AdaptivityProvider>
-        </ConfigProvider>
-    );
-}
 
 
 //Просто функция для тестирования, чтобы не ломать app
