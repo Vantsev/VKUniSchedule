@@ -145,6 +145,7 @@ function App() {
                                                 <Select
                                                     placeholder="Выберите корпус"
                                                     options={[
+                                                        { label: 'Выберите корпус', value: 'pusto' }
                                                         { label: 'БМ', value: 'BM' },
                                                         { label: 'Гаста', value: 'Gasta' },
                                                         { label: 'Ленса', value: 'Lensa' },
