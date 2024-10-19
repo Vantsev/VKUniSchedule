@@ -17,7 +17,7 @@ import {
     Div,
     ConfigProvider,
     AdaptivityProvider,
-    Text
+    Text, ButtonGroup
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import {createRoot} from "react-dom/client";
@@ -96,9 +96,15 @@ function App() {
                                             />
                                         </FormItem>
                                         <FormItem>
-                                            <Button size="l" stretched onClick={fetchSchedule}>
-                                                Получить расписание
-                                            </Button>
+                                            <ButtonGroup mode="horizontal" gap="m" stretched>
+                                                <Button onClick={fetchSchedule} size="l"  stretched>
+                                                  Полное расписание
+                                                </Button>
+                                                <Button onClick={fetchSchedule} size="l"  stretched>
+                                                  Текущее расписание
+                                                </Button>
+                                             </ButtonGroup>
+
                                         </FormItem>
                                     </Group>
 
