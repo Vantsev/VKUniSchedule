@@ -65,6 +65,7 @@ function App() {
 
     const [groupId, setGroupId] = useState('');
     const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
+    const [viewType, setViewType] = useState('full');
 
     // Функция для получения расписания группы из локального JSON
     const fetchSchedule = () => {
@@ -75,6 +76,14 @@ function App() {
             setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
         }
     };
+    const handleFullfetchSchedule = () =>{
+        setViewType('full');
+        fetchSchedule();
+    }
+    const handleCurrentfetchSchedule = () =>{
+        setViewType('current');
+        fetchSchedule();
+    }
 
     return (
         <ConfigProvider>
@@ -97,10 +106,10 @@ function App() {
                                         </FormItem>
                                         <FormItem>
                                             <ButtonGroup mode="horizontal" gap="m" stretched>
-                                                <Button onClick={fetchSchedule} size="l"  stretched>
+                                                <Button onClick={handleFullfetchSchedule} size="l"  stretched>
                                                   Полное расписание
                                                 </Button>
-                                                <Button onClick={fetchSchedule} size="l"  stretched>
+                                                <Button onClick={handleCurrentfetchSchedule} size="l"  stretched>
                                                   Текущее расписание
                                                 </Button>
                                              </ButtonGroup>
@@ -120,11 +129,18 @@ function App() {
                                                         {Object.entries(lessons).map(([time, details], lessonIndex) => (
                                                             <SimpleCell key={lessonIndex}>
                                                                 <strong>{time}</strong>
-                                                                {/* Фильтруем занятия по текущей неделе */}
-                                                                {filterLessonsByWeek(details, isOddWeek).length > 0 ? (
-                                                                    <Div>{filterLessonsByWeek(details, isOddWeek)[0]}</Div>
+                                                                {/* Фильтруем занятия по четности недели только для текущего расписания */}
+                                                                {viewType === 'current' ? (
+                                                                    filterLessonsByWeek(details, isOddWeek).length > 0 ? (
+                                                                        <Div>{filterLessonsByWeek(details, isOddWeek)[0]}</Div>
+                                                                    ) : (
+                                                                        <Div>Отдыхаем</Div>
+                                                                    )
                                                                 ) : (
-                                                                    <Div>Отдыхаем</Div>)}
+                                                                    details.map((lesson, lessonIndex) => (
+                                                                        <Div key={lessonIndex}>{lesson}</Div>
+                                                                    ))
+                                                                )}
                                                             </SimpleCell>
                                                         ))}
                                                     </Group>
