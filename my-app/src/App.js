@@ -28,35 +28,35 @@ import {createRoot} from "react-dom/client";
 
 // Компонент для вычисления четности недели
 function useWeekParity() {
-  const [isOddWeek, setIsOddWeek] = useState(false);
+    const [isOddWeek, setIsOddWeek] = useState(false);
 
-  useEffect(() => {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth();
-    const today = new Date(year, month, 0).getTime();
-    const now = new Date().getTime();
-    const week = Math.ceil((now - today) / (1000 * 60 * 60 * 24 * 7));
-    setIsOddWeek(week % 2 !== 0); // Четная неделя
-  }, []);
+    useEffect(() => {
+        const year = new Date().getFullYear();
+        const month = new Date().getMonth();
+        const today = new Date(year, month, 0).getTime();
+        const now = new Date().getTime();
+        const week = Math.ceil((now - today) / (1000 * 60 * 60 * 24 * 7));
+        setIsOddWeek(week % 2 !== 0); // Четная неделя
+    }, []);
 
-  return isOddWeek;
+    return isOddWeek;
 }
 
 
 // Функция для фильтрации занятий по текущей неделе
 function filterLessonsByWeek(lessons, isOddWeek) {
-  return lessons.filter((lesson) => {
-    if (lesson.startsWith('▲') && isOddWeek) {
-      return true; // Показываем для нечетной недели
-    }
-    if (lesson.startsWith('▼') && !isOddWeek) {
-      return true; // Показываем для четной недели
-    }
-    if (!lesson.startsWith('▲') && !lesson.startsWith('▼')) {
-      return true; // Показываем независимо от четности
-    }
-    return false; // Убираем занятия, которые не подходят по четности
-  });
+    return lessons.filter((lesson) => {
+        if (lesson.startsWith('▲') && isOddWeek) {
+            return true; // Показываем для нечетной недели
+        }
+        if (lesson.startsWith('▼') && !isOddWeek) {
+            return true; // Показываем для четной недели
+        }
+        if (!lesson.startsWith('▲') && !lesson.startsWith('▼')) {
+            return true; // Показываем независимо от четности
+        }
+        return false; // Убираем занятия, которые не подходят по четности
+    });
 }
 
 
@@ -68,6 +68,7 @@ function App() {
 
     const [groupId, setGroupId] = useState('');
     const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
+    const [viewType, setViewType] = useState('full');
 
     // Функция для получения расписания группы из локального JSON
     const fetchSchedule = () => {
@@ -78,7 +79,6 @@ function App() {
             setSchedule({error: 'Группа не найдена'});  // Если группа не найдена
         }
     };
-
     const handleFullfetchSchedule = () =>{
         setViewType('full');
         fetchSchedule();
@@ -89,7 +89,7 @@ function App() {
     }
     const clearG = () => {
         document.getElementById("groupInput").value = '';
-        }
+    }
     const clearT = () => {
         document.getElementById("teacherInput").value = '';
     }
@@ -166,9 +166,14 @@ function App() {
                                             </FormItem>
                                         </div>
                                         <FormItem>
-                                            <Button size="l" stretched onClick={fetchSchedule}>
-                                                Получить расписание
-                                            </Button>
+                                            <ButtonGroup mode="horizontal" gap="m" stretched>
+                                                <Button onClick={handleFullfetchSchedule} size="l" stretched>
+                                                    Полное расписание
+                                                </Button>
+                                                <Button onClick={handleCurrentfetchSchedule} size="l" stretched>
+                                                    Текущее расписание
+                                                </Button>
+                                            </ButtonGroup>
                                         </FormItem>
                                     </Group>
 
@@ -183,20 +188,32 @@ function App() {
                                                         {/* Перебираем пары на день и фильтруем их в зависимости от четности недели */}
                                                         {Object.entries(lessons).map(([time, details], lessonIndex) => {
                                                             let filteredLessons = filterLessonsByWeek(details, isOddWeek);
-                                                            if (filteredLessons.length > 0) {
-                                                                return (
+                                                            if (viewType === 'current') {
+                                                                if (filteredLessons.length > 0) {
+                                                                    return (
+                                                                        <SimpleCell key={lessonIndex}>
+                                                                            <strong>{time}</strong>
+                                                                            <SplitLayout>
+                                                                                <Div style={{ width: '100vw' }}>
+                                                                                    <Textarea readOnly>{filteredLessons[0]}</Textarea>
+                                                                                </Div>
+                                                                            </SplitLayout>
+                                                                        </SimpleCell>
+                                                                    );
+                                                                }
+                                                            } else {
+                                                                return details.map((lesson, lessonIndex) => (
                                                                     <SimpleCell key={lessonIndex}>
                                                                         <strong>{time}</strong>
                                                                         <SplitLayout>
-                                                                            <Div style={{ width: '100vw'}}>
-                                                                                <Textarea readOnly>{filteredLessons[0]}</Textarea>
+                                                                            <Div key={lessonIndex} style={{ width: '100vw' }}>
+                                                                                <Textarea readOnly>{lesson}</Textarea>
                                                                             </Div>
                                                                         </SplitLayout>
                                                                     </SimpleCell>
-                                                                );
+                                                                ));
                                                             }
                                                         })}
-
                                                     </Group>
                                                 ))
                                             )}
@@ -215,27 +232,27 @@ function App() {
 
 //Просто функция для тестирования, чтобы не ломать app
 function Test() {
-  const [groupId, setGroupId] = useState('');
-  const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
+    const [groupId, setGroupId] = useState('');
+    const [schedule, setSchedule] = useState(null); //Объявляем состояние для хранения расписания группы. Начальное значение — null.
 
- useEffect(() => {
-    console.log('Все расписания:',
-      Object.entries(schedules).map(([group, days], index) => (
-          Object.entries(days).map(([day, lessons], lessonIndex) => {
-              return {group, days};
-          }
-     )))
-    ); // Вывод всех расписаний в консоль
+    useEffect(() => {
+        console.log('Все расписания:',
+            Object.entries(schedules).map(([group, days], index) => (
+                Object.entries(days).map(([day, lessons], lessonIndex) => {
+                        return {group, days};
+                    }
+                )))
+        ); // Вывод всех расписаний в консоль
 
-    setSchedule(schedules); // Устанавливаем расписания в состояние
-  }, []); // Этот хук вызывается один раз при монтировании компонента
+        setSchedule(schedules); // Устанавливаем расписания в состояние
+    }, []); // Этот хук вызывается один раз при монтировании компонента
 
-  return (
-    <div>
-      <h1>Все расписания (см. консоль)</h1>
-      {/* Визуально ничего не отображаем, но можем использовать {schedule} для проверки */}
-    </div>
-  );
+    return (
+        <div>
+            <h1>Все расписания (см. консоль)</h1>
+            {/* Визуально ничего не отображаем, но можем использовать {schedule} для проверки */}
+        </div>
+    );
 }
 
 const container = document.getElementById('root');
