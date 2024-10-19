@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.buttonGroupHighlightStyles {
+  border: 2px dotted tomato;
+  box-sizing: border-box;
+}
